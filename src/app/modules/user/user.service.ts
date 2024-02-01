@@ -18,10 +18,10 @@ import {
   generateFacultyId,
   generateStudentId,
 } from './user.utils';
-import { TStudent } from '../student/student.interface';
-import { AcademicSemester } from '../academicSemester/academicSemester.model';
-import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
-import { Student } from '../student/student.model';
+import { TStudent } from '../Student/student.interface';
+import { AcademicSemester } from '../AcademicSemester/academicSemester.model';
+import { AcademicDepartment } from '../AcademicDepartment/academicDepartment.model';
+import { Student } from '../Student/student.model';
 import { USER_ROLE } from './user.constant';
 
 const createStudentIntoDB = async (

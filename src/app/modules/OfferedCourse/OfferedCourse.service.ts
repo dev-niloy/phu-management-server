@@ -6,8 +6,10 @@ import { Faculty } from '../Faculty/faculty.model';
 import { TOfferedCourse } from './OfferedCourse.interface';
 import { OfferedCourse } from './OfferedCourse.model';
 import { hasTimeConflict } from './OfferedCourse.utils';
-import { Student } from '../student/student.model';
-import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.model';
+import { Student } from '../Student/student.model';
+import { SemesterRegistration } from '../SemesterRegistration/semesterRegistration.model';
+import { AcademicFaculty } from '../AcademicFaculty/academicFaculty.model';
+import { AcademicDepartment } from '../AcademicDepartment/academicDepartment.model';
 
 const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
   const {

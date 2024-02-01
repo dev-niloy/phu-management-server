@@ -1,9 +1,9 @@
 import express from 'express';
 import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../User/user.constant';
 import validateRequest from '../../middlewares/validateRequest';
 import { CourseControllers } from './course.controller';
 import { CourseValidations } from './course.validation';
-import { USER_ROLE } from '../user/user.constant';
 
 const router = express.Router();
 
@@ -16,7 +16,6 @@ router.post(
 
 router.get(
   '/:id',
-
   auth(
     USER_ROLE.superAdmin,
     USER_ROLE.admin,

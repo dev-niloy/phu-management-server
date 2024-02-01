@@ -9,8 +9,8 @@ import { OfferedCourse } from '../OfferedCourse/OfferedCourse.model';
 import { TEnrolledCourse } from './enrolledCourse.interface';
 import EnrolledCourse from './enrolledCourse.model';
 import { calculateGradeAndPoints } from './enrolledCourse.utils';
-import { Student } from '../student/student.model';
-import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.model';
+import { Student } from '../Student/student.model';
+import { SemesterRegistration } from '../SemesterRegistration/semesterRegistration.model';
 
 const createEnrolledCourseIntoDB = async (
   userId: string,
@@ -128,7 +128,7 @@ const createEnrolledCourseIntoDB = async (
     if (!result) {
       throw new AppError(
         httpStatus.BAD_REQUEST,
-        'Failed to enroll in this cousre !',
+        'Failed to enroll in this course !',
       );
     }
 
