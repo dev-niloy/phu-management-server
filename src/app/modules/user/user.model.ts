@@ -2,14 +2,17 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../config';
-import { UserStatus } from './user.constant';
 import { TUser, UserModel } from './user.interface';
 const userSchema = new Schema<TUser, UserModel>(
   {
-    id: {
+    name: {
       type: String,
       required: true,
-      unique: true,
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'others'],
+      required: true,
     },
     email: {
       type: String,
@@ -18,24 +21,20 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     password: {
       type: String,
-      required: true,
       select: 0,
     },
-    needsPasswordChange: {
-      type: Boolean,
-      default: true,
-    },
-    passwordChangedAt: {
-      type: Date,
+    image: {
+      type: String,
     },
     role: {
       type: String,
-      enum: ['superAdmin', 'student', 'faculty', 'admin'],
+      enum: ['superAdmin', 'admin', 'moderator', 'user'],
+      default: 'user',
     },
     status: {
       type: String,
-      enum: UserStatus,
-      default: 'in-progress',
+      enum: ['active', 'blocked'],
+      default: 'active',
     },
     isDeleted: {
       type: Boolean,
@@ -51,23 +50,19 @@ userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this; // doc
   // hashing password and save into DB
-
   user.password = await bcrypt.hash(
-    user.password,
+    user.password as string,
     Number(config.bcrypt_salt_rounds),
   );
 
   next();
 });
 
-// set '' after saving password
-userSchema.post('save', function (doc, next) {
-  doc.password = '';
-  next();
-});
-
 userSchema.statics.isUserExistsByCustomId = async function (id: string) {
   return await User.findOne({ id }).select('+password');
+};
+userSchema.statics.isUserExistsByEmail = async function (email: string) {
+  return await User.findOne({ email }).select('+password');
 };
 
 userSchema.statics.isPasswordMatched = async function (

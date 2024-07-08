@@ -1,8 +1,22 @@
 import { z } from 'zod';
 
+// Define the validation schema for the register API
+const registerValidationSchema = z.object({
+  body: z.object({
+    name: z.string(),
+    gender: z.enum(['male', 'female', 'other']),
+    email: z.string().email(),
+    password: z.string().min(6),
+    image: z.string().url().optional(),
+    role: z.enum(['superAdmin', 'admin', 'moderator', 'user']).default('user'),
+    status: z.enum(['active', 'blocked']).default('active'),
+    isDeleted: z.boolean().default(false),
+  }),
+});
+
 const loginValidationSchema = z.object({
   body: z.object({
-    id: z.string({ required_error: 'Id is required.' }),
+    email: z.string({ required_error: 'Email is required.' }),
     password: z.string({ required_error: 'Password is required' }),
   }),
 });
@@ -44,6 +58,7 @@ const resetPasswordValidationSchema = z.object({
 });
 
 export const AuthValidation = {
+  registerValidationSchema,
   loginValidationSchema,
   changePasswordValidationSchema,
   refreshTokenValidationSchema,

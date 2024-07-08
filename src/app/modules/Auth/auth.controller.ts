@@ -5,9 +5,21 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { AuthServices } from './auth.service';
 
+// register new user
+const registerUser = catchAsync(async (req, res) => {
+  const result = await AuthServices.registerUser(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User created successfully!',
+    data: result,
+  });
+});
+
+// login user
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body);
-  const { refreshToken, accessToken, needsPasswordChange } = result;
+  const { refreshToken, accessToken } = result;
 
   res.cookie('refreshToken', refreshToken, {
     secure: config.NODE_ENV === 'production',
@@ -22,11 +34,11 @@ const loginUser = catchAsync(async (req, res) => {
     message: 'User is logged in successfully!',
     data: {
       accessToken,
-      needsPasswordChange,
     },
   });
 });
 
+// change password
 const changePassword = catchAsync(async (req, res) => {
   const { ...passwordData } = req.body;
 
@@ -39,6 +51,7 @@ const changePassword = catchAsync(async (req, res) => {
   });
 });
 
+// refresh token
 const refreshToken = catchAsync(async (req, res) => {
   const { refreshToken } = req.cookies;
   const result = await AuthServices.refreshToken(refreshToken);
@@ -51,6 +64,7 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
+// forget password
 const forgetPassword = catchAsync(async (req, res) => {
   const userId = req.body.id;
   const result = await AuthServices.forgetPassword(userId);
@@ -62,6 +76,7 @@ const forgetPassword = catchAsync(async (req, res) => {
   });
 });
 
+// reset password
 const resetPassword = catchAsync(async (req, res) => {
   const token = req.headers.authorization;
 
@@ -79,6 +94,7 @@ const resetPassword = catchAsync(async (req, res) => {
 });
 
 export const AuthControllers = {
+  registerUser,
   loginUser,
   changePassword,
   refreshToken,

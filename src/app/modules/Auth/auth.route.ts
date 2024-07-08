@@ -1,5 +1,5 @@
 import express from 'express';
-import auth from '../../middlewares/auth';
+// import auth from '../../middlewares/auth';
 import { USER_ROLE } from '../User/user.constant';
 import validateRequest from '../../middlewares/validateRequest';
 import { AuthControllers } from './auth.controller';
@@ -8,6 +8,11 @@ import { AuthValidation } from './auth.validation';
 const router = express.Router();
 
 router.post(
+  '/register-user',
+  validateRequest(AuthValidation.registerValidationSchema),
+  AuthControllers.registerUser,
+);
+router.post(
   '/login',
   validateRequest(AuthValidation.loginValidationSchema),
   AuthControllers.loginUser,
@@ -15,12 +20,7 @@ router.post(
 
 router.post(
   '/change-password',
-  auth(
-    USER_ROLE.superAdmin,
-    USER_ROLE.admin,
-    USER_ROLE.faculty,
-    USER_ROLE.student,
-  ),
+  // auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.moderator),
   validateRequest(AuthValidation.changePasswordValidationSchema),
   AuthControllers.changePassword,
 );
